@@ -34,16 +34,16 @@ void handle_response(char *request, int client_sock) {
         snprintf(response_buff, BUFFER_SIZE, "Your number is %d", num);
         write(client_sock, response_buff, strlen(response_buff));
     }
-    else if (strcmp(path, "/increment") == 0) {
+    else if (strncmp(path, "/increment") == 0) {
         num++;
         write(client_sock, HTTP_200_OK, strlen(HTTP_200_OK));
-        snprintf(response_buff, BUFFER_SIZE, "Incremented to %d", num);
+        snprintf(response_buff, BUFFER_SIZE, "Incremented to%d", num);
         write(client_sock, response_buff, strlen(response_buff));
     }
     else if (strncmp(path, "/add?value=", 11) == 0) {
         int value;
         // parse the value out of the query string
-        if (sscanf(path, "/add?value=%d", &value) == 1) {
+        if (sscanf(path + 11, "/add?value=%d", &value) == 1) {
             num += value;
             write(client_sock, HTTP_200_OK, strlen(HTTP_200_OK));
             snprintf(response_buff, BUFFER_SIZE, "Added %d to your number", value);
